@@ -1,0 +1,1755 @@
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Voifiste — Growing Support, Growing Minds</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --forest: #1e4a2e;
+    --sage: #4a7c5e;
+    --mint: #8fbea0;
+    --foam: #d6ede0;
+    --cream: #f5f0e8;
+    --warm-white: #faf8f4;
+    --ink: #1a1a1a;
+    --muted: #6b7b6e;
+    --gold: #c4924a;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--warm-white);
+    color: var(--ink);
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* NOISE TEXTURE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.35;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 20px 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(245, 240, 232, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(74, 124, 94, 0.12);
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+
+  .nav-logo-icon {
+    width: 36px; height: 36px;
+    background: var(--forest);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .nav-logo-icon svg { width: 20px; height: 20px; fill: white; }
+
+  .nav-logo-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--forest);
+    letter-spacing: -0.02em;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--forest); }
+
+  .nav-cta {
+    background: var(--forest);
+    color: white !important;
+    padding: 10px 24px;
+    border-radius: 100px;
+    font-weight: 600 !important;
+    transition: background 0.2s, transform 0.2s !important;
+  }
+
+  .nav-cta:hover { background: var(--sage) !important; transform: translateY(-1px); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    padding: 120px 60px 80px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+  .blob-1 {
+    width: 600px; height: 600px;
+    background: var(--foam);
+    top: -100px; right: -100px;
+    animation: drift1 12s ease-in-out infinite alternate;
+  }
+
+  .blob-2 {
+    width: 400px; height: 400px;
+    background: var(--mint);
+    bottom: 0; left: -80px;
+    animation: drift2 15s ease-in-out infinite alternate;
+    opacity: 0.2;
+  }
+
+  @keyframes drift1 { from { transform: translate(0,0) scale(1); } to { transform: translate(30px, 20px) scale(1.05); } }
+  @keyframes drift2 { from { transform: translate(0,0) scale(1); } to { transform: translate(-20px, 30px) scale(1.08); } }
+
+  .hero-content { position: relative; z-index: 2; }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--foam);
+    border: 1px solid rgba(74,124,94,0.3);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--sage);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .eyebrow-dot {
+    width: 6px; height: 6px;
+    background: var(--sage);
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.7); } }
+
+  .hero-headline {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 5vw, 4.5rem);
+    font-weight: 900;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    color: var(--forest);
+    margin-bottom: 28px;
+    animation: fadeUp 0.8s ease 0.1s both;
+  }
+
+  .hero-headline em {
+    font-style: italic;
+    color: var(--sage);
+  }
+
+  .hero-sub {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: var(--muted);
+    font-weight: 300;
+    max-width: 480px;
+    margin-bottom: 44px;
+    animation: fadeUp 0.8s ease 0.2s both;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    animation: fadeUp 0.8s ease 0.3s both;
+  }
+
+  .btn-primary {
+    background: var(--forest);
+    color: white;
+    padding: 14px 32px;
+    border-radius: 100px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: all 0.25s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 24px rgba(30,74,46,0.25);
+  }
+
+  .btn-primary:hover { background: var(--sage); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(30,74,46,0.3); }
+
+  .btn-secondary {
+    color: var(--forest);
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: gap 0.2s;
+  }
+
+  .btn-secondary:hover { gap: 14px; }
+
+  .hero-visual {
+    position: relative;
+    z-index: 2;
+    animation: fadeUp 0.8s ease 0.15s both;
+  }
+
+  .hero-card-stack {
+    position: relative;
+    height: 520px;
+  }
+
+  .hero-main-card {
+    background: white;
+    border-radius: 24px;
+    padding: 36px;
+    box-shadow: 0 20px 80px rgba(30,74,46,0.12);
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    border: 1px solid rgba(74,124,94,0.1);
+  }
+
+  .hero-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+
+  .avatar-group {
+    display: flex;
+  }
+
+  .avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 2px solid white;
+    margin-left: -8px;
+    background: var(--foam);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--forest);
+    overflow: hidden;
+  }
+
+  .avatar:first-child { margin-left: 0; }
+
+  .avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+  .card-label { font-size: 0.85rem; color: var(--muted); font-weight: 500; }
+  .card-label strong { color: var(--forest); display: block; font-size: 0.95rem; }
+
+  .mood-tracker {
+    background: var(--cream);
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin-bottom: 20px;
+  }
+
+  .mood-label { font-size: 0.78rem; font-weight: 600; color: var(--muted); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 14px; }
+
+  .mood-grid {
+    display: flex;
+    gap: 10px;
+  }
+
+  .mood-item {
+    flex: 1;
+    background: white;
+    border-radius: 12px;
+    padding: 12px 8px;
+    text-align: center;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .mood-item.active {
+    border-color: var(--sage);
+    background: var(--foam);
+  }
+
+  .mood-emoji { font-size: 1.5rem; display: block; margin-bottom: 4px; }
+  .mood-text { font-size: 0.72rem; color: var(--muted); font-weight: 500; }
+
+  .progress-section { margin-top: 4px; }
+  .progress-header { display: flex; justify-content: space-between; margin-bottom: 8px; }
+  .progress-title { font-size: 0.85rem; font-weight: 600; color: var(--ink); }
+  .progress-pct { font-size: 0.85rem; font-weight: 700; color: var(--sage); }
+  .progress-bar { background: var(--foam); border-radius: 100px; height: 8px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 100px; background: linear-gradient(90deg, var(--sage), var(--mint)); width: 68%; animation: fillBar 1.5s ease 0.5s both; }
+
+  @keyframes fillBar { from { width: 0; } to { width: 68%; } }
+
+  .floating-badge {
+    position: absolute;
+    background: white;
+    border-radius: 16px;
+    padding: 14px 18px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid rgba(74,124,94,0.1);
+    animation: float 4s ease-in-out infinite;
+  }
+
+  .badge-1 { bottom: 80px; right: -20px; animation-delay: 0s; }
+  .badge-2 { bottom: 0; left: 20px; animation-delay: 2s; }
+
+  @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+  .badge-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+  }
+
+  .badge-icon.green { background: var(--foam); }
+  .badge-icon.gold { background: #fef3e2; }
+
+  .badge-text { font-size: 0.78rem; color: var(--muted); }
+  .badge-text strong { color: var(--ink); display: block; font-size: 0.88rem; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* STATS BAR */
+  .stats-bar {
+    background: var(--forest);
+    padding: 40px 60px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+  }
+
+  .stat-item {
+    text-align: center;
+    padding: 0 30px;
+    border-right: 1px solid rgba(255,255,255,0.15);
+    opacity: 0;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .stat-item:last-child { border-right: none; }
+  .stat-item:nth-child(1) { animation-delay: 0.1s; }
+  .stat-item:nth-child(2) { animation-delay: 0.2s; }
+  .stat-item:nth-child(3) { animation-delay: 0.3s; }
+  .stat-item:nth-child(4) { animation-delay: 0.4s; }
+
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.6rem;
+    font-weight: 900;
+    color: white;
+    line-height: 1;
+    margin-bottom: 6px;
+    letter-spacing: -0.03em;
+  }
+
+  .stat-num span { color: var(--mint); }
+
+  .stat-label {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.6);
+    font-weight: 400;
+    line-height: 1.4;
+  }
+
+  /* SECTION BASE */
+  section {
+    padding: 100px 60px;
+  }
+
+  .section-eyebrow {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--sage);
+    margin-bottom: 16px;
+  }
+
+  .section-headline {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 900;
+    line-height: 1.15;
+    letter-spacing: -0.025em;
+    color: var(--forest);
+    margin-bottom: 20px;
+  }
+
+  .section-sub {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--muted);
+    font-weight: 300;
+    max-width: 540px;
+  }
+
+  /* PROBLEM SECTION */
+  .problem-section {
+    background: var(--cream);
+  }
+
+  .problem-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    margin-top: 60px;
+  }
+
+  .problem-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .problem-card {
+    background: white;
+    border-radius: 20px;
+    padding: 28px;
+    border: 1px solid rgba(74,124,94,0.08);
+    transition: transform 0.25s, box-shadow 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .problem-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--sage), var(--mint));
+    border-radius: 20px 20px 0 0;
+  }
+
+  .problem-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(30,74,46,0.1); }
+
+  .problem-card-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: var(--forest);
+    line-height: 1;
+    margin-bottom: 8px;
+    letter-spacing: -0.04em;
+  }
+
+  .problem-card-text {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.5;
+    font-weight: 400;
+  }
+
+  .problem-card.large {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    background: var(--forest);
+    color: white;
+  }
+
+  .problem-card.large::before { background: var(--mint); }
+
+  .problem-card.large .problem-card-num { color: var(--mint); }
+  .problem-card.large .problem-card-text { color: rgba(255,255,255,0.7); }
+
+  .problem-icon {
+    width: 48px; height: 48px;
+    background: rgba(143,190,160,0.2);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+  }
+
+  .problem-text-col {}
+  .problem-text-col .section-sub { max-width: 100%; }
+
+  .quote-block {
+    margin-top: 32px;
+    border-left: 3px solid var(--sage);
+    padding-left: 24px;
+  }
+
+  .quote-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    font-style: italic;
+    line-height: 1.6;
+    color: var(--forest);
+    margin-bottom: 12px;
+  }
+
+  .quote-source {
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  /* SOLUTION */
+  .solution-section {
+    background: var(--warm-white);
+  }
+
+  .solution-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: end;
+    margin-bottom: 64px;
+  }
+
+  .solution-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .sol-card {
+    background: white;
+    border-radius: 24px;
+    padding: 36px 28px;
+    border: 1px solid rgba(74,124,94,0.08);
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .sol-card:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(30,74,46,0.1); }
+
+  .sol-card.featured {
+    background: var(--forest);
+    color: white;
+  }
+
+  .sol-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--mint);
+    letter-spacing: 0.05em;
+    margin-bottom: 20px;
+  }
+
+  .sol-card:not(.featured) .sol-num { color: var(--sage); }
+
+  .sol-icon {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  .sol-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 14px;
+    color: var(--forest);
+    line-height: 1.3;
+  }
+
+  .sol-card.featured .sol-title { color: white; }
+
+  .sol-desc {
+    font-size: 0.9rem;
+    line-height: 1.65;
+    color: var(--muted);
+    font-weight: 300;
+  }
+
+  .sol-card.featured .sol-desc { color: rgba(255,255,255,0.7); }
+
+  .sol-tag {
+    display: inline-block;
+    margin-top: 20px;
+    background: var(--foam);
+    color: var(--sage);
+    padding: 5px 14px;
+    border-radius: 100px;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  .sol-card.featured .sol-tag { background: rgba(143,190,160,0.2); color: var(--mint); }
+
+  /* VALUES */
+  .values-section {
+    background: var(--foam);
+    text-align: center;
+  }
+
+  .values-header { margin-bottom: 64px; }
+  .values-header .section-sub { margin: 0 auto; }
+
+  .values-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    margin-bottom: 80px;
+  }
+
+  .value-card {
+    background: white;
+    border-radius: 20px;
+    padding: 36px 24px;
+    border: 1px solid rgba(74,124,94,0.1);
+    transition: transform 0.25s;
+    text-align: left;
+  }
+
+  .value-card:hover { transform: translateY(-4px); }
+
+  .value-icon {
+    font-size: 1.8rem;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .value-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--forest);
+    margin-bottom: 10px;
+  }
+
+  .value-desc {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  /* HOW IT WORKS */
+  .hiw-section {
+    background: var(--warm-white);
+  }
+
+  .hiw-header { margin-bottom: 64px; }
+
+  .hiw-steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    position: relative;
+  }
+
+  .hiw-steps::before {
+    content: '';
+    position: absolute;
+    top: 36px; left: 10%; right: 10%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--foam), var(--sage), var(--foam));
+    z-index: 0;
+  }
+
+  .hiw-step {
+    text-align: center;
+    padding: 0 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hiw-step-circle {
+    width: 72px; height: 72px;
+    background: var(--forest);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.6rem;
+    margin: 0 auto 24px;
+    box-shadow: 0 4px 20px rgba(30,74,46,0.2);
+    border: 4px solid var(--warm-white);
+  }
+
+  .hiw-step-num {
+    position: absolute;
+    top: 0; right: calc(50% - 44px);
+    background: var(--gold);
+    color: white;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    font-size: 0.7rem;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .hiw-step-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--forest);
+    margin-bottom: 10px;
+  }
+
+  .hiw-step-desc {
+    font-size: 0.84rem;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  /* MARKET */
+  .market-section {
+    background: var(--forest);
+    color: white;
+  }
+
+  .market-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    margin-top: 60px;
+  }
+
+  .market-rings {
+    position: relative;
+    height: 320px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ring {
+    border-radius: 50%;
+    border: 2px solid rgba(143,190,160,0.3);
+    position: absolute;
+    display: flex; align-items: center; justify-content: center;
+    text-align: center;
+  }
+
+  .ring-3 { width: 300px; height: 300px; }
+  .ring-2 { width: 210px; height: 210px; border-color: rgba(143,190,160,0.5); background: rgba(143,190,160,0.05); }
+  .ring-1 { width: 130px; height: 130px; border-color: var(--mint); background: rgba(143,190,160,0.15); }
+
+  .ring-label {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.8);
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .ring-label strong {
+    display: block;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    color: var(--mint);
+  }
+
+  .ring-outer-label {
+    position: absolute;
+    right: -10px;
+    top: 20px;
+    text-align: right;
+  }
+
+  .ring-mid-label {
+    position: absolute;
+    left: -10px;
+    bottom: 40px;
+  }
+
+  .market-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+
+  .mstat {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 28px;
+    backdrop-filter: blur(10px);
+  }
+
+  .mstat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--mint);
+    letter-spacing: -0.04em;
+    margin-bottom: 8px;
+  }
+
+  .mstat-label { font-size: 0.85rem; color: rgba(255,255,255,0.6); line-height: 1.5; }
+  .mstat-label strong { color: white; display: block; margin-bottom: 4px; font-size: 0.95rem; }
+
+  .market-section .section-headline { color: white; }
+  .market-section .section-eyebrow { color: var(--mint); }
+
+  /* REVENUE */
+  .revenue-section {
+    background: var(--cream);
+  }
+
+  .revenue-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 80px;
+    align-items: center;
+    margin-top: 60px;
+  }
+
+  .revenue-sources { display: flex; flex-direction: column; gap: 16px; }
+
+  .rev-source {
+    background: white;
+    border-radius: 16px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border: 1px solid rgba(74,124,94,0.08);
+    transition: transform 0.2s;
+  }
+
+  .rev-source:hover { transform: translateX(6px); }
+
+  .rev-bar-wrap { flex: 1; }
+  .rev-source-name { font-size: 0.88rem; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+  .rev-bar { height: 6px; background: var(--foam); border-radius: 100px; overflow: hidden; }
+  .rev-fill { height: 100%; border-radius: 100px; transition: width 1s ease; }
+  .rev-pct { font-size: 0.95rem; font-weight: 700; color: var(--forest); white-space: nowrap; }
+
+  .projection-chart {
+    background: white;
+    border-radius: 24px;
+    padding: 36px;
+    border: 1px solid rgba(74,124,94,0.08);
+  }
+
+  .chart-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: var(--forest); margin-bottom: 28px; }
+
+  .chart-bars {
+    display: flex;
+    gap: 16px;
+    align-items: flex-end;
+    height: 180px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--foam);
+  }
+
+  .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+
+  .bar {
+    width: 100%;
+    border-radius: 8px 8px 0 0;
+    background: var(--foam);
+    transition: all 0.6s ease;
+    position: relative;
+    min-height: 8px;
+  }
+
+  .bar.active { background: linear-gradient(180deg, var(--sage), var(--forest)); }
+
+  .bar-val {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--forest);
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .bar-yr {
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-weight: 500;
+    margin-top: 10px;
+  }
+
+  .chart-note {
+    margin-top: 20px;
+    font-size: 0.82rem;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .chart-note::before {
+    content: '';
+    width: 12px; height: 12px;
+    background: var(--forest);
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  /* SEGMENTS */
+  .segments-section { background: var(--warm-white); }
+  .segments-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    margin-top: 64px;
+  }
+
+  .seg-card {
+    border-radius: 24px;
+    padding: 40px 32px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.25s;
+  }
+
+  .seg-card:hover { transform: translateY(-6px); }
+  .seg-card.primary { background: var(--forest); color: white; }
+  .seg-card.secondary { background: var(--foam); }
+  .seg-card.tertiary { background: white; border: 1px solid rgba(74,124,94,0.12); }
+
+  .seg-icon { font-size: 2.2rem; margin-bottom: 20px; display: block; }
+  .seg-tag {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 100px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .seg-card.primary .seg-tag { background: rgba(143,190,160,0.2); color: var(--mint); }
+  .seg-card.secondary .seg-tag { background: white; color: var(--sage); }
+  .seg-card.tertiary .seg-tag { background: var(--foam); color: var(--sage); }
+
+  .seg-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+
+  .seg-card.primary .seg-title { color: white; }
+  .seg-card:not(.primary) .seg-title { color: var(--forest); }
+
+  .seg-desc {
+    font-size: 0.88rem;
+    line-height: 1.65;
+    margin-bottom: 24px;
+  }
+
+  .seg-card.primary .seg-desc { color: rgba(255,255,255,0.7); }
+  .seg-card:not(.primary) .seg-desc { color: var(--muted); }
+
+  .seg-detail {
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .seg-card.primary .seg-detail { color: var(--mint); }
+  .seg-card:not(.primary) .seg-detail { color: var(--sage); }
+
+  /* CTA */
+  .cta-section {
+    background: var(--forest);
+    text-align: center;
+    padding: 120px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: rgba(143,190,160,0.08);
+    top: -200px; left: -100px;
+    pointer-events: none;
+  }
+
+  .cta-section::after {
+    content: '';
+    position: absolute;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: rgba(143,190,160,0.06);
+    bottom: -150px; right: -50px;
+    pointer-events: none;
+  }
+
+  .cta-content { position: relative; z-index: 2; max-width: 680px; margin: 0 auto; }
+
+  .cta-eyebrow {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--mint);
+    margin-bottom: 24px;
+  }
+
+  .cta-headline {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 4vw, 3.5rem);
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: white;
+    margin-bottom: 24px;
+  }
+
+  .cta-sub {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.65);
+    font-weight: 300;
+    margin-bottom: 48px;
+  }
+
+  .cta-buttons { display: flex; gap: 16px; justify-content: center; align-items: center; }
+
+  .btn-white {
+    background: white;
+    color: var(--forest);
+    padding: 14px 36px;
+    border-radius: 100px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: all 0.25s;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+  }
+
+  .btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 36px rgba(0,0,0,0.2); }
+
+  .btn-ghost {
+    border: 2px solid rgba(255,255,255,0.3);
+    color: white;
+    padding: 14px 32px;
+    border-radius: 100px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: all 0.25s;
+  }
+
+  .btn-ghost:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.5); }
+
+  /* TRUST BAR */
+  .trust-bar {
+    background: var(--cream);
+    padding: 32px 60px;
+    display: flex;
+    align-items: center;
+    gap: 48px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .trust-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--muted);
+  }
+
+  .trust-check {
+    width: 24px; height: 24px;
+    background: var(--foam);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--sage);
+    font-size: 0.8rem;
+    flex-shrink: 0;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--ink);
+    color: rgba(255,255,255,0.5);
+    padding: 60px;
+  }
+
+  .footer-inner {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 60px;
+    margin-bottom: 48px;
+  }
+
+  .footer-brand {}
+
+  .footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .footer-logo-icon {
+    width: 32px; height: 32px;
+    background: var(--sage);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .footer-logo-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: white;
+  }
+
+  .footer-tagline {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    max-width: 240px;
+  }
+
+  .footer-col-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 16px;
+  }
+
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer-links a { color: rgba(255,255,255,0.4); font-size: 0.88rem; text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: rgba(255,255,255,0.8); }
+
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding-top: 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+  }
+
+  .footer-legal { display: flex; gap: 24px; }
+  .footer-legal a { color: rgba(255,255,255,0.35); text-decoration: none; transition: color 0.2s; }
+  .footer-legal a:hover { color: rgba(255,255,255,0.6); }
+
+  /* SCROLL REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (max-width: 900px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; padding: 100px 24px 60px; }
+    .hero-card-stack { height: 400px; }
+    .stats-bar { grid-template-columns: repeat(2,1fr); padding: 40px 24px; }
+    section { padding: 70px 24px; }
+    .problem-grid, .market-grid, .revenue-grid, .solution-header { grid-template-columns: 1fr; gap: 40px; }
+    .solution-cards, .values-row, .segments-grid { grid-template-columns: 1fr; }
+    .hiw-steps { grid-template-columns: 1fr 1fr; gap: 32px; }
+    .hiw-steps::before { display: none; }
+    .footer-inner { grid-template-columns: 1fr 1fr; gap: 36px; }
+    .market-rings { height: 260px; }
+    .ring-3 { width: 240px; height: 240px; }
+    .ring-2 { width: 168px; height: 168px; }
+    .ring-1 { width: 104px; height: 104px; }
+    .trust-bar { padding: 24px; gap: 24px; }
+    .cta-section { padding: 80px 24px; }
+    .cta-buttons { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <span class="nav-logo-text">Voifiste</span>
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="#problem">The Problem</a></li>
+    <li><a href="#solution">Our Solution</a></li>
+    <li><a href="#how-it-works">How It Works</a></li>
+    <li><a href="#market">Market</a></li>
+    <li><a href="#" class="nav-cta">Get Early Access</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" style="padding-top:120px;">
+  <div class="hero-bg-blob blob-1"></div>
+  <div class="hero-bg-blob blob-2"></div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+    </div>
+
+    <h1 class="hero-headline">
+      Every teen deserves<br>
+      a <em>safe place</em><br>
+      to start.
+    </h1>
+
+    <p class="hero-sub">
+      Voifiste is a prevention-focused mental health platform delivering expert-designed education, coping tools, and personalized skill-building in a safe, private, judgment-free space.
+    </p>
+
+    <div class="hero-actions">
+      <a href="soon.html" class="btn-primary">
+        Get Early Access
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#solution" class="btn-secondary">
+        See How It Works
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="hero-card-stack">
+      <div class="hero-main-card">
+        <div class="hero-card-header">
+          <div class="avatar-group">
+            <div class="avatar" style="background:#d6ede0;color:#1e4a2e;">J</div>
+            <div class="avatar" style="background:#f5f0e8;color:#4a7c5e;">L</div>
+            <div class="avatar" style="background:#e8f4ec;color:#1e4a2e;">G</div>
+            <div class="avatar" style="background:#fef3e2;color:#c4924a;">M</div>
+          </div>
+          <div class="card-label">
+            <strong>This Week's Progress</strong>
+            4 teens completed their pathway
+          </div>
+        </div>
+
+        <div class="mood-tracker">
+          <div class="mood-label">How are you feeling today?</div>
+          <div class="mood-grid">
+            <div class="mood-item">
+              <span class="mood-emoji">😰</span>
+              <span class="mood-text">Anxious</span>
+            </div>
+            <div class="mood-item">
+              <span class="mood-emoji">😔</span>
+              <span class="mood-text">Low</span>
+            </div>
+            <div class="mood-item active">
+              <span class="mood-emoji">😌</span>
+              <span class="mood-text">Calm</span>
+            </div>
+            <div class="mood-item">
+              <span class="mood-emoji">😊</span>
+              <span class="mood-text">Good</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="progress-section">
+          <div class="progress-header">
+            <span class="progress-title">Stress Management Pathway</span>
+            <span class="progress-pct">68%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="floating-badge badge-1">
+        <div class="badge-icon green">🔒</div>
+        <div class="badge-text">
+          <strong>Fully Encrypted</strong>
+          Your data, always private
+        </div>
+      </div>
+
+      <div class="floating-badge badge-2">
+        <div class="badge-icon gold">🧠</div>
+        <div class="badge-text">
+          <strong>Psychologist-Designed</strong>
+          Expert-reviewed content
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-num">1 in <span>5</span></div>
+    <div class="stat-label">teens experience anxiety<br>or depression</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num"><span>63%</span></div>
+    <div class="stat-label">would use a mental health<br>app before a counselor</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num"><span>52%</span></div>
+    <div class="stat-label">of schools lack adequate<br>mental health services</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num"><span>9M</span></div>
+    <div class="stat-label">teens actively struggling<br>with mental health</div>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<section class="problem-section" id="problem">
+  <div class="section-eyebrow">The Problem</div>
+  <h2 class="section-headline">A silent crisis<br>hiding in plain sight.</h2>
+
+  <div class="problem-grid">
+    <div class="problem-stats reveal">
+      <div class="problem-card">
+        <div class="problem-card-num">145%</div>
+        <div class="problem-card-text">Increase in depression<br>among girls since 2010</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-card-num">161%</div>
+        <div class="problem-card-text">Increase in depression<br>among boys since 2010</div>
+      </div>
+      <div class="problem-card large">
+          <div class="problem-card-num">#2</div>
+          <div class="problem-card-text">Suicide is the second leading cause of death for individuals ages 10 to 24 in the U.S.</div>
+        </div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-card-num">52%</div>
+        <div class="problem-card-text">Schools lack adequate mental health services</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-card-num">34%</div>
+        <div class="problem-card-text">Parents can't afford youth mental health guidance</div>
+      </div>
+    </div>
+
+    <div class="problem-text-col reveal">
+      <p class="section-sub">
+        Teen mental health challenges are rising at an unprecedented rate though yet access to support remains broken. Cost, stigma, fear of judgment, and a lack of teen-specific resources leave millions of adolescents without the help they need.
+      </p>
+
+      <div class="quote-block">
+        <p class="quote-text">"Teens don't always need a diagnosis first. They need somewhere safe to start."</p>
+        <p class="quote-source">— The insight behind Voifiste</p>
+      </div>
+
+      <p class="section-sub" style="margin-top: 24px;">
+        Even when help is available, teens fear stigma, don't understand their symptoms, and don't know how to navigate support systems. Voifiste directly bridges this gap through accessible, digital early intervention.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTION -->
+<section class="solution-section" id="solution">
+  <div class="solution-header reveal">
+    <div>
+      <div class="section-eyebrow">Our Solution</div>
+      <h2 class="section-headline">Three pillars of early intervention.</h2>
+    </div>
+    <p class="section-sub">
+      Voifiste combines on-demand resources, personalized pathways, and total privacy to create a platform teens will actually use before things spiral into crisis.
+    </p>
+  </div>
+
+  <div class="solution-cards reveal">
+    <div class="sol-card">
+      <div class="sol-num">01</div>
+      <h3 class="sol-title">On-Demand Digital Education</h3>
+      <p class="sol-desc">Teens access coping tools, guided exercises, and mental health education anytime, anywhere increasing convenience and lowering barriers to help.</p>
+      <div class="sol-tag">Available 24/7</div>
+    </div>
+
+    <div class="sol-card featured">
+      <div class="sol-num">02</div>
+      <h3 class="sol-title">Personalized Skill-Building Pathways</h3>
+      <p class="sol-desc">Our algorithm analyzes emotional check-in data and categorizes users into stress profiles, generating a tailored 4–6 week pathway for each teen's unique needs.</p>
+      <div class="sol-tag">Adaptive Technology</div>
+    </div>
+
+    <div class="sol-card">
+      <div class="sol-num">03</div>
+      <h3 class="sol-title">Private, Judgment-Free Space</h3>
+      <p class="sol-desc">All data is fully encrypted. No public sharing. No peer comparison. No social features. A genuinely safe environment where teens can open up without fear.</p>
+      <div class="sol-tag">Zero Social Features</div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section style="background:var(--cream); padding: 100px 60px;" id="how-it-works">
+  <div style="text-align:center; margin-bottom: 64px;" class="reveal">
+    <div class="section-eyebrow">How It Works</div>
+    <h2 class="section-headline">From sign-up to self-growth<br>in four simple steps.</h2>
+  </div>
+
+  <div class="hiw-steps reveal">
+    <div class="hiw-step">
+      <div style="position:relative; display:inline-block;">
+        <div class="hiw-step-circle">🌱</div>
+        <div class="hiw-step-num">1</div>
+      </div>
+      <h3 class="hiw-step-title">Sign Up Privately</h3>
+      <p class="hiw-step-desc">Quick, private onboarding with parental consent for minors. No personal data beyond what's needed.</p>
+    </div>
+
+    <div class="hiw-step">
+      <div style="position:relative; display:inline-block;">
+        <div class="hiw-step-circle">💬</div>
+        <div class="hiw-step-num">2</div>
+      </div>
+      <h3 class="hiw-step-title">Emotional Check-In</h3>
+      <p class="hiw-step-desc">Complete a short emotional self-assessment to help our system understand your stress profile.</p>
+    </div>
+
+    <div class="hiw-step">
+      <div style="position:relative; display:inline-block;">
+        <div class="hiw-step-circle">🗺️</div>
+        <div class="hiw-step-num">3</div>
+      </div>
+      <h3 class="hiw-step-title">Get Your Pathway</h3>
+      <p class="hiw-step-desc">Receive a personalized 4–6 week skill-building plan crafted around your specific stress patterns and needs.</p>
+    </div>
+
+    <div class="hiw-step">
+      <div style="position:relative; display:inline-block;">
+        <div class="hiw-step-circle">📈</div>
+        <div class="hiw-step-num">4</div>
+      </div>
+      <h3 class="hiw-step-title">Build Real Skills</h3>
+      <p class="hiw-step-desc">Engage with psychologist-designed content, track your progress, and develop lasting coping skills.</p>
+    </div>
+  </div>
+</section>
+
+<!-- VALUES -->
+<section class="values-section">
+  <div class="values-header reveal">
+    <div class="section-eyebrow">Our Values</div>
+    <h2 class="section-headline">Built on what<br>teens actually need.</h2>
+    <p class="section-sub">Every decision at Voifiste is guided by four core commitments: Confidential, Accessible, Resourceful, Empowering.</p>
+  </div>
+
+  <div class="values-row reveal">
+    <div class="value-card">
+      <div class="value-name">Confidential</div>
+      <p class="value-desc">Fully encrypted data. No social features. No peer comparison. What teens share stays with them.</p>
+    </div>
+    <div class="value-card">
+      <div class="value-name">Accessible</div>
+      <p class="value-desc">Affordable pricing for families. School-based deployment. Available on mobile and web, wherever teens are.</p>
+    </div>
+    <div class="value-card">
+      <div class="value-name">Resourceful</div>
+      <p class="value-desc">Expert-reviewed content guided by licensed psychologists. Real coping tools, not generic wellness fluff.</p>
+    </div>
+    <div class="value-card">
+      <div class="value-name">Empowering</div>
+      <p class="value-desc">We build skills, not dependency. Our goal is to prepare teens to navigate life's challenges independently.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SEGMENTS -->
+<section class="segments-section">
+  <div class="section-eyebrow reveal">Who We Serve</div>
+  <h2 class="section-headline reveal">Designed for teens.<br>Trusted by families and schools.</h2>
+
+  <div class="segments-grid reveal">
+    <div class="seg-card primary">
+      <div class="seg-tag">Primary Market</div>
+      <h3 class="seg-title">Teens Ages 13–18</h3>
+      <p class="seg-desc">Tech-dependent, emotionally stressed, and often hesitant to pursue traditional therapy due to fear and stigma. Voifiste meets them where they already are.</p>
+      <div class="seg-detail">→ 9M actively struggling teens in the U.S.</div>
+    </div>
+
+    <div class="seg-card secondary">
+      <div class="seg-tag">Secondary Market</div>
+      <h3 class="seg-title">Parents</h3>
+      <p class="seg-desc">Concerned but often unsure how to help. Seeking affordable, safe resources that give their child support and them peace of mind.</p>
+      <div class="seg-detail">→ $60/year family subscription</div>
+    </div>
+
+    <div class="seg-card tertiary">
+      <div class="seg-tag">Institutional Market</div>
+      <h3 class="seg-title">Schools & Organizations</h3>
+      <p class="seg-desc">Counselors and administrators seeking FERPA-compliant tools to improve student wellbeing, safety, and compliance at scale.</p>
+      <div class="seg-detail">→ $15/student annually · Bulk licensing</div>
+    </div>
+  </div>
+</section>
+
+<!-- MARKET -->
+<section class="market-section" id="market">
+  <div class="section-eyebrow">Market Opportunity</div>
+  <h2 class="section-headline">A massive,<br>underserved market.</h2>
+
+  <div class="market-grid reveal">
+    <div class="market-rings">
+      <div class="ring ring-3">
+        <div class="ring-outer-label">
+          <div class="ring-label"><strong>60M</strong> TAM<br>Parents of U.S. teens</div>
+        </div>
+      </div>
+      <div class="ring ring-2">
+        <div class="ring-mid-label">
+          <div class="ring-label"><strong>20M</strong> SAM<br>High school parents</div>
+        </div>
+      </div>
+      <div class="ring ring-1">
+        <div class="ring-label"><strong>9M</strong><br>SOM</div>
+      </div>
+    </div>
+
+    <div>
+      <p class="section-sub" style="color: rgba(255,255,255,0.7); margin-bottom: 36px;">
+        The global mental health app market is experiencing rapid growth and Voifiste sits at the intersection of rising demand, digital scalability, and preventative healthcare.
+      </p>
+
+      <div class="market-stats">
+        <div class="mstat">
+          <div class="mstat-num">$2.8M</div>
+          <div class="mstat-label"><strong>Year 3 Revenue</strong>Supporting ~120,000 students across 240 schools</div>
+        </div>
+        <div class="mstat">
+          <div class="mstat-num">90.7%</div>
+          <div class="mstat-label"><strong>Year 4 Gross Margin</strong>Low marginal cost for each new user</div>
+        </div>
+        <div class="mstat">
+          <div class="mstat-num">$4.95M</div>
+          <div class="mstat-label"><strong>Year 4 Revenue</strong>Less than 1% of U.S. high school market</div>
+        </div>
+        <div class="mstat">
+          <div class="mstat-num">$45</div>
+          <div class="mstat-label"><strong>Student LTV</strong>$15/year over an average 3-year retention</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REVENUE -->
+<section class="revenue-section" id="revenue">
+  <div class="section-eyebrow reveal">Revenue Model</div>
+  <h2 class="section-headline reveal">Diversified revenue.<br>Predictable growth.</h2>
+
+  <div class="revenue-grid reveal">
+    <div>
+      <p class="section-sub" style="margin-bottom: 36px;">
+        Voifiste runs on a recurring revenue model with three distinct streams, reducing dependency risk and building financial stability from day one.
+      </p>
+
+      <div class="revenue-sources">
+        <div class="rev-source">
+          <div class="rev-bar-wrap">
+            <div class="rev-source-name">Schools — $15/student/year</div>
+            <div class="rev-bar"><div class="rev-fill" style="width: 65%; background: linear-gradient(90deg, var(--forest), var(--sage));"></div></div>
+          </div>
+          <div class="rev-pct">65%</div>
+        </div>
+        <div class="rev-source">
+          <div class="rev-bar-wrap">
+            <div class="rev-source-name">Parents — $60/year subscription</div>
+            <div class="rev-bar"><div class="rev-fill" style="width: 25%; background: linear-gradient(90deg, var(--sage), var(--mint));"></div></div>
+          </div>
+          <div class="rev-pct">25%</div>
+        </div>
+        <div class="rev-source">
+          <div class="rev-bar-wrap">
+            <div class="rev-source-name">Organizations — Contract agreements</div>
+            <div class="rev-bar"><div class="rev-fill" style="width: 10%; background: linear-gradient(90deg, var(--mint), #c4d9cb);"></div></div>
+          </div>
+          <div class="rev-pct">10%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="projection-chart">
+      <div class="chart-title">Revenue Projections (Years 1–4)</div>
+      <div class="chart-bars">
+        <div class="bar-col">
+          <div class="bar-val">$150K</div>
+          <div class="bar" style="height: 14%;"></div>
+          <div class="bar-yr">Year 1</div>
+        </div>
+        <div class="bar-col">
+          <div class="bar-val">$850K</div>
+          <div class="bar active" style="height: 30%;"></div>
+          <div class="bar-yr">Year 2</div>
+        </div>
+        <div class="bar-col">
+          <div class="bar-val">$2.8M</div>
+          <div class="bar active" style="height: 60%;"></div>
+          <div class="bar-yr">Year 3</div>
+        </div>
+        <div class="bar-col">
+          <div class="bar-val">$4.95M</div>
+          <div class="bar active" style="height: 100%;"></div>
+          <div class="bar-yr">Year 4</div>
+        </div>
+      </div>
+      <div class="chart-note">Gross margin grows from 46% (Y1) to 90.7% (Y4)</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-content reveal">
+    <div class="cta-eyebrow">Join the Movement</div>
+    <h2 class="cta-headline">The question isn't whether teens need this.<br>It's who will build it right.</h2>
+    <p class="cta-sub">
+      Voifiste combines social impact, financial sustainability, regulatory compliance, and measurable growth. We're building the platform teens deserve and the investment opportunity behind it.
+    </p>
+    <div class="cta-buttons">
+      <a href="#" class="btn-white">Get Early Access →</a>
+      <a href="#" class="btn-ghost">Learn About Investing</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-logo">
+        <div class="footer-logo-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17 8C8 10 5.9 16.17 3.82 20.49C5.65 17.02 9.46 14.54 13 14c-3 2-4 4-4 6h2c0-2 2.17-4 4-5 3-1.5 5-3.5 5-7C20 5.22 17.97 3 15 2c2.24 2.24 2 6-2 6z"/>
+          </svg>
+        </div>
+        <span class="footer-logo-text">Voifiste</span>
+      </div>
+      <p class="footer-tagline">Growing Support, Growing Minds. Early mental health intervention for the next generation.</p>
+    </div>
+
+    <div>
+      <div class="footer-col-title">Product</div>
+      <ul class="footer-links">
+        <li><a href="#">Features</a></li>
+        <li><a href="#">How It Works</a></li>
+        <li><a href="#">For Schools</a></li>
+        <li><a href="#">For Parents</a></li>
+        <li><a href="#">Pricing</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <div class="footer-col-title">Company</div>
+      <ul class="footer-links">
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Our Team</a></li>
+        <li><a href="#">Investors</a></li>
+        <li><a href="#">Press</a></li>
+        <li><a href="#">Careers</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <div class="footer-col-title">Support</div>
+      <ul class="footer-links">
+        <li><a href="#">Help Center</a></li>
+        <li><a href="#">Crisis Resources</a></li>
+        <li><a href="#">Contact Us</a></li>
+        <li><a href="#">FERPA/COPPA</a></li>
+        <li><a href="#">988 Helpline</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <span>© 2025 Voifiste. All rights reserved.</span>
+    <div class="footer-legal">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">COPPA Notice</a>
+      <a href="#">FERPA Compliance</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.12 });
+
+  reveals.forEach(el => observer.observe(el));
+
+  // Mood selector
+  document.querySelectorAll('.mood-item').forEach(item => {
+    item.addEventListener('click', () => {
+      document.querySelectorAll('.mood-item').forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+    });
+  });
+
+  // Nav scroll effect
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', () => {
+    nav.style.boxShadow = window.scrollY > 20 ? '0 4px 24px rgba(0,0,0,0.08)' : 'none';
+  });
+</script>
+</body>
+</html>
